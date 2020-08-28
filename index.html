@@ -1,0 +1,58 @@
+<html>
+    <head>
+     <title>fileZpeer</title>
+     <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+     <script src='https://bundle.run/prettier-bytes'></script>
+     <script src='https://bundle.run/upload-element'></script> 
+     <script src='https://bundle.run/drag-drop'></script>
+     <script src="https://bundle.run/simple-peer"></script> 
+     <script src="https://bundle.run/simple-websocket"></script> 
+     <script src='https://bundle.run/create-torrent'></script>
+
+    </head>
+    <body>
+     <h1>FILES Z Z PEER</h1>
+     <form class="login">
+         <label for="name">name</label>
+         <input type="text" name="name" id="name" >
+         <label for="roomid">roomid:</label>
+         <span id="roomid" name ="roomid"></span>
+         <button type="submit">host</button>
+     </form>
+    
+     <form id="join">
+        or
+        <p></p>
+         <label for="join">roomid</label>
+         <input type="number" name="join" id="join">
+         <button type ="submit">join</button>
+     </form>
+     <p><button id="connect">connect</button></p>
+     <section>
+        <h2>info</h2>
+        <div id='speed'></div>
+        <div id='log'></div>
+    </section>
+    <h2>Message:</h2>
+     <ul class="message">
+         
+     </ul>
+     <div>
+        <form class="chatbox" style="bottom:0px;position: relative;">
+            <label for="message">type message</label>
+            <input name="message" id="message">
+            <button type="submit">send</button>
+            <input type="file" name="upload" id="upload" multiple>
+         </form>
+         <button id="download">Download</button>
+     </div>
+     <div>
+        <button><label for="stream">click here for stream</label> </button> 
+         <input type="file" name="stream" id="stream" style="display: none;">
+         this button does not work now
+     </div>
+     
+     
+     <script src="main.js"></script>
+    </body>
+</html>
