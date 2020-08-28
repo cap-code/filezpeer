@@ -88,17 +88,7 @@ function init() {
     socket.on("data", (evt) => {
         evt = JSON.parse(evt);
 
-        if (evt.type == "offer") {
-            peer.signal(evt);
-            peer.on("signal", data => {
-                socket.send(JSON.stringify(data));
-            });
-        } else if (evt.type == "answer") {
-            peer.signal(evt);
-            peer.on("signal", data => {
-                socket.send(JSON.stringify(data));
-            });
-        }
+        peer.signal(evt);
     });
     socket.on('close', () => {
         log(`some connection closed`);
@@ -146,6 +136,11 @@ function addPeer(){
     
     peer.on("error", (err) => {
         log(`error on peer:${err}`);
+    });
+    
+    peer.on("signal", data => {
+        //log(`${JSON.stringify(data)}`);
+        socket.send(JSON.stringify(data));
     });
     peer.on('connect', () => {
         log(`peer connection established`);
