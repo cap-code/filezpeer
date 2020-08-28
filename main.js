@@ -100,8 +100,21 @@ function init() {
 
 function createPeer(){
     peer = new simplePeer({
-        initiator: true
-    });
+        initiator: true,
+        config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
+   urls: [ "stun:bn-turn1.xirsys.com" ]
+},{
+   username: "DizWDRVNR_YztfyU5maWHrBL0oBh4Tf85x13P3wXo9MfA6n6mkCOSUcn2i2NgSlvAAAAAF9JMNljYXBjb2Rl",
+   credential: "9bce68ac-e94b-11ea-9b7e-0242ac140004",
+   urls: [
+       "turn:bn-turn1.xirsys.com:80?transport=udp",
+       "turn:bn-turn1.xirsys.com:3478?transport=udp",
+       "turn:bn-turn1.xirsys.com:80?transport=tcp",
+       "turn:bn-turn1.xirsys.com:3478?transport=tcp",
+       "turns:bn-turn1.xirsys.com:443?transport=tcp",
+       "turns:bn-turn1.xirsys.com:5349?transport=tcp"]}
+      ] }
+                        });
 
     peer.on("error", (err) => {
         log(`error on peer : ${err}`);
@@ -119,20 +132,33 @@ function createPeer(){
     peer.on('data', data => {
         var text = JSON.parse(data);
         console.log(text);
-        const div = document.createElement('div');
-        const p = document.createElement('p');
+        const p = document.createElement('li');
         if (text.infohash) {
             p.textContent = text.name + ' : ' + text.infohash;
             text.infohash = text.infohash.trim();
         } else {
             p.textContent = text.name + ' : ' + text.msg;
         }
-        div.appendChild(p);
+        
         message.appendChild(p);
     });
 }
 function addPeer(){
-    peer= new simplePeer();
+    peer= new simplePeer({
+    config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
+   urls: [ "stun:bn-turn1.xirsys.com" ]
+},{
+   username: "DizWDRVNR_YztfyU5maWHrBL0oBh4Tf85x13P3wXo9MfA6n6mkCOSUcn2i2NgSlvAAAAAF9JMNljYXBjb2Rl",
+   credential: "9bce68ac-e94b-11ea-9b7e-0242ac140004",
+   urls: [
+       "turn:bn-turn1.xirsys.com:80?transport=udp",
+       "turn:bn-turn1.xirsys.com:3478?transport=udp",
+       "turn:bn-turn1.xirsys.com:80?transport=tcp",
+       "turn:bn-turn1.xirsys.com:3478?transport=tcp",
+       "turns:bn-turn1.xirsys.com:443?transport=tcp",
+       "turns:bn-turn1.xirsys.com:5349?transport=tcp"]}
+      ] }
+    });
     
     peer.on("error", (err) => {
         log(`error on peer:${err}`);
