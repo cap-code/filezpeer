@@ -6,7 +6,8 @@ var form2 = document.querySelector('.chatbox');
 var form3 = document.getElementById("join");
 document.getElementById("connect").style.display="none";
 var peer ;
-
+//do not use this API_URL ,its only for demo , if u want one go to https://www.websocket.in/ 
+var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
 //torrent starts
 var client;
