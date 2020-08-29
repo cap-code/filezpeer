@@ -5,7 +5,21 @@ var form1 = document.querySelector('.login');
 var form2 = document.querySelector('.chatbox');
 var form3 = document.getElementById("join");
 document.getElementById("connect").style.display="none";
-var peer ;
+var peer = new simplePeer({
+    config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
+   urls: [ "stun:bn-turn1.xirsys.com" ]
+},{
+   username: "DizWDRVNR_YztfyU5maWHrBL0oBh4Tf85x13P3wXo9MfA6n6mkCOSUcn2i2NgSlvAAAAAF9JMNljYXBjb2Rl",
+   credential: "9bce68ac-e94b-11ea-9b7e-0242ac140004",
+   urls: [
+       "turn:bn-turn1.xirsys.com:80?transport=udp",
+       "turn:bn-turn1.xirsys.com:3478?transport=udp",
+       "turn:bn-turn1.xirsys.com:80?transport=tcp",
+       "turn:bn-turn1.xirsys.com:3478?transport=tcp",
+       "turns:bn-turn1.xirsys.com:443?transport=tcp",
+       "turns:bn-turn1.xirsys.com:5349?transport=tcp"]}
+      ] }
+    }) ;
 //do not use this API_URL ,its only for demo , if u want one go to https://www.websocket.in/ 
 var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
@@ -195,7 +209,14 @@ function addPeer(){
 //torrent starts
 
 function inittorrent() {
-    client = new WebTorrent();
+    client = new WebTorrent({
+        tracker: {
+            rtcConfig: {
+              ...peer.config,
+            }
+          }
+        }
+    );
     client.on("warning", logError);
     client.on("error", logError);
     const download = document.getElementById('download');
