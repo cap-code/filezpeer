@@ -99,6 +99,8 @@ function init() {
 }
 
 function createPeer(){
+    //u can use google stun , but cant use the turn its only for demo and don't work for you 
+    //u can get turn server from https://xirsys.com/
     peer = new simplePeer({
         initiator: true,
         config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
@@ -144,6 +146,8 @@ function createPeer(){
     });
 }
 function addPeer(){
+     //u can use google stun , but cant use the turn its only for demo and don't work for you 
+    //u can get turn server from https://xirsys.com/
     peer= new simplePeer({
     config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
    urls: [ "stun:bn-turn1.xirsys.com" ]
