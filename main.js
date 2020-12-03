@@ -1,31 +1,17 @@
 var room = Math.floor(Math.random() * 100) + 1;
 var name = navigator.platform + room;
 var message = document.querySelector('.message');
-var form1 = document.querySelector('.login');
-var form2 = document.querySelector('.chatbox');
-var form3 = document.getElementById("join");
-document.getElementById("connect").style.display="none";
-var peer = new simplePeer({
-    config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
-   urls: [ "stun:bn-turn1.xirsys.com" ]
-},{
-   username: "DizWDRVNR_YztfyU5maWHrBL0oBh4Tf85x13P3wXo9MfA6n6mkCOSUcn2i2NgSlvAAAAAF9JMNljYXBjb2Rl",
-   credential: "9bce68ac-e94b-11ea-9b7e-0242ac140004",
-   urls: [
-       "turn:bn-turn1.xirsys.com:80?transport=udp",
-       "turn:bn-turn1.xirsys.com:3478?transport=udp",
-       "turn:bn-turn1.xirsys.com:80?transport=tcp",
-       "turn:bn-turn1.xirsys.com:3478?transport=tcp",
-       "turns:bn-turn1.xirsys.com:443?transport=tcp",
-       "turns:bn-turn1.xirsys.com:5349?transport=tcp"]}
-      ] }
-    }) ;
+var hostForm = document.querySelector('.host');
+var chatboxForm = document.querySelector('.chatbox');
+var joinForm = document.getElementById("join");
+var upload = document.getElementById("upload");
+const fileSelect = document.getElementById("fileSelect");
 //do not use this API_URL ,its only for demo , if u want one go to https://www.websocket.in/ 
 var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
 //torrent starts
 var client;
-var start = 0;
+var start;
 
 function log(message) {
     const log = document.querySelector('#log');
@@ -47,56 +33,54 @@ function logElement(elm) {
     log.appendChild(elm);
 }
 
-
-form1.addEventListener('submit', event => {
+ hostForm.addEventListener('submit', event => {
+     start="host";
     event.preventDefault();
-    const formdata = new FormData(form1);
+    const formdata = new FormData (hostForm);
     if (formdata.get('name') != "") {
         name = formdata.get('name');
     }
     document.getElementById("roomid").innerHTML = room;
-    addPeer();
     init();
-    form3.style.display = "none";
+    joinForm.style.display = "none";
 });
-form2.addEventListener('submit', event => {
+joinForm.addEventListener('submit', event => {
+    start ="join";
     event.preventDefault();
-    const formdata = new FormData(form2);
-    const msg = formdata.get('message');
-    const data = {
-        name,
-        msg
-    };
-    peer.send(JSON.stringify(data));
-    const p = document.createElement('p');
-    p.textContent = "me : " + msg;
-    message.appendChild(p);
-    form2.reset();
-});
-form3.addEventListener('submit', event => {
-    start = 1;
-    event.preventDefault();
-    const formdata = new FormData(form3);
+    const formdata = new FormData(joinForm);
     if (formdata.get('join') == "" || formdata.get('join') == " ") {
         window.alert("enter room id");
     } else {
        room = formdata.get('join');
         init();
-        form3.reset();
+        joinForm.reset();
     }
 });
-document.getElementById("connect").addEventListener('click',event=>{
+chatboxForm.addEventListener('submit', event => {
     event.preventDefault();
-    createPeer();
+    const formdata = new FormData(chatboxForm);
+    const msg = formdata.get('message');
+    let type = "chat";
+    const data = {
+        name,
+        msg,
+        type
+    };
+    peer.send(JSON.stringify(data));
+    const p = document.createElement('p');
+    p.textContent = "me : " + msg;
+    message.appendChild(p);
+    chatboxForm.reset();
 });
 //websocket is set
 function init() {
     socket = new simpleWebsocket("wss://connect.websocket.in/v3/" + room + "?apiKey=" + API_URL);
     socket.on("connect", () => {
         log(`connection established`);
-        if(start == 1){
-           form3.style.display="none";
-           document.getElementById("connect").style.display="";
+        if(start=="join"){
+           createPeer();
+        }else{
+            addPeer();
         }
     });
     socket.on("data", (evt) => {
@@ -144,19 +128,43 @@ function createPeer(){
     peer.on('connect', () => {
         log(`peer connection established`);
     });
-
+    var filechunks = [];
     peer.on('data', data => {
-        var text = JSON.parse(data);
+        var flag;
+        //console.log(typeof(data));
+        try{
+            JSON.parse(data);
+            flag = true;
+          } catch(e){
+              flag = false;
+          }
         console.log(text);
-        const p = document.createElement('li');
-        if (text.infohash) {
-            p.textContent = text.name + ' : ' + text.infohash;
-            text.infohash = text.infohash.trim();
-        } else {
-            p.textContent = text.name + ' : ' + text.msg;
+        if(flag){
+            var text = JSON.parse(data);
+          const p = document.createElement('li');
+        if (text.type == "first data") {
+            p.textContent = text.s;
+            message.appendChild(p);
+         }else if(text.type =="chat") {
+             p.textContent = text.name + ' : ' + text.msg;
+             message.appendChild(p);
+         }else if(text.type == "finish"){
+            var file = new Blob(filechunks);
+            console.log('blob',file);
+            file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
+            console.log('received',file);
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(file);
+                a.textContent = "download";
+                a.download = text.name;
+                logElement(a);
         }
+        }else {
+            filechunks.push(data);
+        }
+        //console.log(text);
         
-        message.appendChild(p);
+        
     });
 }
 function addPeer(){
@@ -189,162 +197,101 @@ function addPeer(){
     peer.on('connect', () => {
         log(`peer connection established`);
     });
+    var filechunks = [];
     peer.on('data', data => {
-        var text = JSON.parse(data);
-            console.log(text);
-            //const div = document.createElement('div');
+        var flag;
+      // console.log(typeof(data));
+      try{
+        JSON.parse(data);
+        flag = true;
+      } catch(e){
+          flag = false;
+      }
+        if(flag){
+            var text = JSON.parse(data);
             const p = document.createElement('li');
-            if (text.infohash) {
-                p.textContent = text.name + ' : ' + text.infohash;
-                text.infohash = text.infohash.trim();
-            } else {
-                p.textContent = text.name + ' : ' + text.msg;
-            }
-            //div.appendChild(p);
-            message.appendChild(p);
-    });
-}
-
-
-//torrent starts
-
-function inittorrent() {
-    client = new WebTorrent({
-        tracker: {
-            rtcConfig: {
-              ...peer.config,
-            }
+          if (text.type == "first data") {
+              p.textContent = text.s;
+              message.appendChild(p);
+           }else if(text.type =="chat") {
+               p.textContent = text.name + ' : ' + text.msg;
+               message.appendChild(p);
+           }else if(text.type == "finish"){
+              var file = new Blob(filechunks);
+              console.log('blob',file);
+              file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
+              console.log('received',file);
+                  const a = document.createElement('a');
+                  a.href = URL.createObjectURL(file);
+                  a.textContent = "download";
+                  a.download = text.name;
+                  logElement(a);
           }
+          }else {
+              filechunks.push(data);
+          }
+            //div.appendChild(p);
+    });
+}
+fileSelect.addEventListener("click", function (e) {
+    if (upload) {
+      upload.click();
+    }
+  }, false);
+
+upload.addEventListener("change",(event)=>{
+    const FilesList = upload.files;
+    //to show the size in human readable form 
+    let prettySize = ["KB","MB","GB"]; 
+    var s;
+    for(var i=0;i<FilesList.length;i++){
+        let size = FilesList[i].size;
+        let count = 0;
+        for(let i=0;size/1024>1&&i<3;i++,size/=1024){
+            count =i;   
         }
-    );
-    client.on("warning", logError);
-    client.on("error", logError);
-    const download = document.getElementById('download');
-    download.addEventListener('click',event=>{
-       event.preventDefault();
-       const torrentId=document.querySelector('#message').value.trim();
-       addTorrent(torrentId);
-    });
-    const upload = document.querySelector('#upload');
-    uploadElement(upload, (err, results) => {
-        if (err) logError(err);
+        s= FilesList[i].name + " " +size.toFixed(2)+ " " +prettySize[count];
+    }
+        // let file = [];
+        //  for(var i=0 ;i<FilesList.length;i++){
+        //      file[i] =FilesList[i];
+        //  }
+        console.log(FilesList[0]);
+        let name = FilesList[0].name;
+         let type = "first data";
+         let first ={
+             type,
+             s,
+         };
+         peer.send(JSON.stringify(first));
+         const reader = new FileReader();
+         reader.readAsArrayBuffer(FilesList[0]);
+         reader.onload = function(){
+             let buffer = reader.result;
+             const chunksize = 16*1024;
+             var number = 1;
+             while(buffer.byteLength){
+                 const chunk = buffer.slice(0,chunksize);
+                 buffer = buffer.slice(chunksize,buffer.byteLength);
+                 console.log(`chunks ${number}:`,chunk);
+                 peer.send(chunk);
+                 number++;
+             }
+             type ="finish";
+             var ext = FilesList[0].type;
+             let finish={
+                type,
+                name,
+                ext
+             }
+             const p = document.createElement('p');
+             p.textContent = "me : " + name + "  uploaded";
+             message.appendChild(p);
+             peer.send(JSON.stringify(finish));
+         }
+        // end of convert size to human readable code 
+},false);
 
-        const files = results.map(result => result.file);
-        seedFiles(files);
-    });
-    const body = document.querySelector('body');
-    dragDrop(body, seedFiles);
-}
 
-function seedFiles(files) {
-    client.seed(files, handleSeedTorrent);
-    log(`seeding new torrent with ${files.length} files`);
 
-}
 
-function addTorrent(infohash) {
-    console.log("in addTorrent");
-    const announce = createTorrent.announceList.map(arr => arr[0]).filter(url => url.startsWith('wss://') || url.startsWith('ws://'));
-    client.add(infohash, {announce}, handleAdd);
-    // log("adding torrent!");
-}
-
-function updateSpeed(torrent) {
-    const progress = (100 * torrent.progress).toFixed(1);
-    const speed = `
-    <b>Progress:</b> ${progress}%
-    <b>Peer:</b>${torrent.numPeers}
-    <b>Download speed:</b>${prettierBytes(client.downloadSpeed)}/s
-    <b>Upload speed:</b>${prettierBytes(client.uploadSpeed)}/s`;
-
-    document.querySelector('#speed').innerHTML = speed;
-}
-
-function handleSeedTorrent(torrent) {
-    torrent.on('warning', logError);
-    torrent.on('error', logError);
-    updateSpeed(torrent);
-    var infohash = torrent.infoHash;
-    var data = {
-        name,
-        infohash
-    };
-    peer.send(JSON.stringify(data));
-    console.log("found info hash:", infohash);
-    const interval = setInterval(() => {
-        updateSpeed(torrent)
-    }, 1000);
-
-    torrent.on('done', () => {
-        updateSpeed(torrent);
-        clearInterval(interval);
-    });
-    log(`torrent name:${torrent.name}`);
-    log(`Number of files:${torrent.files.length}`);
-    log(`info hash:${torrent.infoHash}`);
-    // log(`Files:`);
-    // torrent.files.forEach(file => {
-    //     file.getBlobURL((err, url) => {
-    //         if (err) logError(err);
-    //         const a = document.createElement('a');
-    //         a.href = url;
-    //         console.log("url", url);
-    //         a.textContent = 'Download' + file.name + '-' + prettierBytes(file.length);
-    //         a.style.display = "block";
-    //         a.download = file.name;
-    //         logElement(a);
-    //     });
-    // });
-    // torrent.files.forEach( file=>{
-    // log(`-${file.name}(${prettierBytes(file.length)})`);
-    //    file.appendTo('#log',{autoplay:true,muted:true},err=>{
-    //        if(err) logError(err);
-    //    }); 
-
-    // });
-
-}
-function handleAdd(torrent){
-    console.log("inside handleAdd");
-    torrent.on('warning', logError);
-    torrent.on('error', logError);
-    updateSpeed(torrent);
-    // peer.send(JSON.stringify(data));
-    console.log("found infohash :", torrent.infoHash);
-    const interval = setInterval(() => {
-        updateSpeed(torrent)
-    }, 1000);
-
-    torrent.on('done', () => {
-        updateSpeed(torrent);
-        clearInterval(interval);
-    });
-    log(`torrent name:${torrent.name}`);
-    log(`Number of files:${torrent.files.length}`);
-    log(`info hash:${torrent.infoHash}`);
-    log(`Files:`);
-    torrent.files.forEach(file => {
-        file.getBlobURL((err, url) => {
-            if (err) logError(err);
-            const a = document.createElement('a');
-            a.href = url;
-            console.log("url", url);
-            a.textContent = 'Download' + file.name + '-' + prettierBytes(file.length);
-            a.style.display = "block";
-            a.download = file.name;
-            logElement(a);
-        });
-    });
-    // torrent.files.forEach( file=>{
-    // log(`-${file.name}(${prettierBytes(file.length)})`);
-    //    file.appendTo('#log',{autoplay:true,muted:true},err=>{
-    //        if(err) logError(err);
-    //    }); 
-
-    // });
-
-}
-
-//ends
-
-inittorrent();

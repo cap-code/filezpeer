@@ -1,7 +1,7 @@
 <html>
     <head>
      <title>fileZpeer</title>
-     <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+     <!-- <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script> -->
      <!-- <script src='https://bundle.run/prettier-bytes'></script> -->
      <!-- <script src='https://bundle.run/upload-element'></script>  -->
      <!-- <script src='https://bundle.run/drag-drop'></script> -->
@@ -9,17 +9,13 @@
      <!-- <script src="https://bundle.run/simple-websocket"></script>  -->
      <!-- <script src='https://bundle.run/create-torrent'></script> -->
      <script src="simplePeer.js"></script>
-     <script src="dragdrop.js"></script>
-     <script src="prettierbytes.js"></script>
-     <script src="uploadelement.js"></script>
      <script src="simplewebsocket.js"></script>
-     <script src="createtorrent.js"></script>
 
 
     </head>
     <body>
      <h1>FILES Z Z PEER</h1>
-     <form class="login">
+     <form class="host">
          <label for="name">name</label>
          <input type="text" name="name" id="name" >
          <label for="roomid">roomid:</label>
@@ -34,7 +30,6 @@
          <input type="number" name="join" id="join">
          <button type ="submit">join</button>
      </form>
-     <p><button id="connect">connect</button></p>
      <section>
         <h2>info</h2>
         <div id='speed'></div>
@@ -49,17 +44,11 @@
             <label for="message">type message</label>
             <input name="message" id="message">
             <button type="submit">send</button>
-            <input type="file" name="upload" id="upload" multiple>
          </form>
+         <input type="file" name="upload" id="upload" multiple style="display:none;">
+            <button id="fileSelect">Select some files</button>
          <button id="download">Download</button>
      </div>
-     <div>
-        <button><label for="stream">click here for stream</label> </button> 
-         <input type="file" name="stream" id="stream" style="display: none;">
-         this button does not work now
-     </div>
-     
-     
      <script src="main.js"></script>
     </body>
 </html>
