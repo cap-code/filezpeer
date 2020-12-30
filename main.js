@@ -156,7 +156,7 @@ function createPeer(){
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(file);
                 a.textContent = "download";
-                a.download = text.name;
+                a.download = text.name + text.ext;
                 logElement(a);
         }
         }else {
@@ -224,7 +224,7 @@ function addPeer(){
                   const a = document.createElement('a');
                   a.href = URL.createObjectURL(file);
                   a.textContent = "download";
-                  a.download = text.name;
+                  a.download = text.name + text.ext;
                   logElement(a);
           }
           }else {
