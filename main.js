@@ -6,12 +6,11 @@ var chatboxForm = document.querySelector('.chatbox');
 var joinForm = document.getElementById("join");
 var upload = document.getElementById("upload");
 const fileSelect = document.getElementById("fileSelect");
-//do not use this API_URL ,its only for demo , if u want one go to https://www.websocket.in/ 
+//do not use this API_URL ,its only for demo , if u want one go to https://www.piesocket.in/ 
 var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
-//torrent starts
-var client;
 var start;
+var peer;
 
 function log(message) {
     const log = document.querySelector('#log');
@@ -74,13 +73,13 @@ chatboxForm.addEventListener('submit', event => {
 });
 //websocket is set
 function init() {
-    socket = new simpleWebsocket("wss://connect.websocket.in/v3/" + room + "?apiKey=" + API_URL);
+    socket = new simpleWebsocket("wss://us-nyc-1.websocket.me/v3/" + room + "?apiKey=" + API_URL);
     socket.on("connect", () => {
         log(`connection established`);
         if(start=="join"){
-           createPeer();
+         createPeer();
         }else{
-            addPeer();
+         addPeer();
         }
     });
     socket.on("data", (evt) => {
@@ -115,7 +114,6 @@ function createPeer(){
        "turns:bn-turn1.xirsys.com:5349?transport=tcp"]}
       ] }
                         });
-
     peer.on("error", (err) => {
         log(`error on peer : ${err}`);
     });
@@ -152,11 +150,12 @@ function createPeer(){
             var file = new Blob(filechunks);
             console.log('blob',file);
             file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
+            console.log(text.ext);
             console.log('received',file);
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(file);
                 a.textContent = "download";
-                a.download = text.name + text.ext;
+                a.download = text.name;
                 logElement(a);
         }
         }else {
@@ -220,11 +219,12 @@ function addPeer(){
               var file = new Blob(filechunks);
               console.log('blob',file);
               file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
+              console.log(text.ext);
               console.log('received',file);
                   const a = document.createElement('a');
                   a.href = URL.createObjectURL(file);
                   a.textContent = "download";
-                  a.download = text.name + text.ext;
+                  a.download = text.name;
                   logElement(a);
           }
           }else {
@@ -258,6 +258,8 @@ upload.addEventListener("change",(event)=>{
         //  }
         console.log(FilesList[0]);
         let name = FilesList[0].name;
+        const lastDote = name.lastIndexOf('.');
+        const ext = name.substring(lastDote+1);
          let type = "first data";
          let first ={
              type,
@@ -278,7 +280,6 @@ upload.addEventListener("change",(event)=>{
                  number++;
              }
              type ="finish";
-             var ext = FilesList[0].type;
              let finish={
                 type,
                 name,
