@@ -223,11 +223,13 @@ function addPeer(){
               file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
               console.log(text.ext);
               console.log('received',file);
+                  const p = documenet.createElement('p');
                   const a = document.createElement('a');
                   a.href = URL.createObjectURL(file);
                   a.textContent = "download";
                   a.download = text.name;
-                  logElement(a);
+                  p.appendChild(a);
+                  logElement(p);
           }
           }else {
               filechunks.push(data);
