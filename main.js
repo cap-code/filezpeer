@@ -152,7 +152,7 @@ function createPeer(){
             file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
             console.log(text.ext);
             console.log('received',file);
-                const p -document.createElement('p');
+                const p =document.createElement('p');
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(file);
                 a.textContent = "download";
