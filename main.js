@@ -149,7 +149,7 @@ function createPeer(){
          }else if(text.type == "finish"){
             var file = new Blob(filechunks);
             console.log('blob',file);
-            file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
+            file = new File([file],text.name,{lastModified: new Date().getTime()});
             console.log(text.ext);
             console.log('received',file);
                 const p =document.createElement('p');
@@ -220,7 +220,7 @@ function addPeer(){
            }else if(text.type == "finish"){
               var file = new Blob(filechunks);
               console.log('blob',file);
-              file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
+              file = new File([file],text.name,{lastModified: new Date().getTime()});
               console.log(text.ext);
               console.log('received',file);
                   const p = documenet.createElement('p');
