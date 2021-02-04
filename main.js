@@ -149,7 +149,7 @@ function createPeer(){
          }else if(text.type == "finish"){
             var file = new Blob(filechunks);
             console.log('blob',file);
-            file = new File([file],text.name,{lastModified: new Date().getTime()});
+            file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
             console.log(text.ext);
             console.log('received',file);
                 const p =document.createElement('p');
@@ -220,7 +220,7 @@ function addPeer(){
            }else if(text.type == "finish"){
               var file = new Blob(filechunks);
               console.log('blob',file);
-              file = new File([file],text.name,{lastModified: new Date().getTime()});
+              file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
               console.log(text.ext);
               console.log('received',file);
                   const p = documenet.createElement('p');
@@ -263,7 +263,7 @@ upload.addEventListener("change",(event)=>{
         console.log(FilesList[0]);
         let name = FilesList[0].name;
         const lastDote = name.lastIndexOf('.');
-        const ext = name.substring(lastDote+1);
+        const ext = FilesList[0].type;
          let type = "first data";
          let first ={
              type,
