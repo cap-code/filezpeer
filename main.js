@@ -159,7 +159,9 @@ function createPeer(){
                 a.download = text.name;
                 p.appendChild(a);
                 logElement(p);
-        }
+             filechunks = [];
+             file='';
+         }
         }else {
             filechunks.push(data);
         }
@@ -230,6 +232,8 @@ function addPeer(){
                   a.download = text.name;
                   p.appendChild(a);
                   logElement(p);
+               filechunks = [];
+               file='';
           }
           }else {
               filechunks.push(data);
