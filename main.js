@@ -4,6 +4,10 @@ var userName;
 const hostButton = document.querySelector('#hostButton');
 const joinButton = document.querySelector('#joinButton');
 const helloUser = document.querySelector('#helloUser');
+const nav = document.querySelector('#navigationBar');
+const inputNameDiv = document.querySelector('#inputNameDiv');
+const messageContainerOuter = document.querySelector('#messageContainerOuter');
+const chatboxContainer = document.querySelector('#chatboxContainer');
 helloUser.style.display="none";
 const inputNameSuperForm = document.querySelector('#inputNameSuperForm');
 var message = document.querySelector('.message');
@@ -15,10 +19,18 @@ var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
 var start;
 var peer;
-
-
+window.onload = (event)=>{
+    let h1 = nav.offsetHeight;
+    let h2 = inputNameDiv.offsetHeight;
+    let h3 = chatboxContainer.offsetHeight;
+    let h4 = window.innerHeight;
+    const h = h4 -(h1 + h2 + h3 + 40);
+    console.log(h);
+    messageContainerOuter.style.maxHeight=`${h}px`;
+}
 //getting user name
 document.querySelector('#inputName').addEventListener('click',(evt)=>{
+      evt.preventDefault();
       userName = document.querySelector('#inputNameForm').value;
       console.log(userName);
       helloUser.textContent = `Hola ${userName}, welcome !!`;
@@ -59,6 +71,9 @@ function logElement(elm) {
 
 joinButton.addEventListener('click',evt=>{
     start='join';
+    if(!userName){
+        userName = defaultName;
+    }
     document.querySelector('#inputCodeButton').addEventListener('click',evt=>{
         const inputCode = document.querySelector('#inputCode').value;
         if(inputCode == "" || inputCode == " " || !inputCode){
@@ -77,7 +92,7 @@ chatboxForm.addEventListener('submit', event => {
     const msg = formdata.get('message');
     let type = "chat";
     const data = {
-        name,
+        userName,
         msg,
         type
     };
@@ -85,6 +100,7 @@ chatboxForm.addEventListener('submit', event => {
     const p = document.createElement('p');
     p.textContent = "me : " + msg;
     message.appendChild(p);
+    messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
     chatboxForm.reset();
 });
 //websocket is set
@@ -159,9 +175,11 @@ function createPeer(){
         if (text.type == "first data") {
             p.textContent = text.s;
             message.appendChild(p);
+            messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
          }else if(text.type =="chat") {
              p.textContent = text.name + ' : ' + text.msg;
              message.appendChild(p);
+             messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
          }else if(text.type == "finish"){
             var file = new Blob(filechunks);
             console.log('blob',file);
@@ -174,7 +192,7 @@ function createPeer(){
                 a.textContent = "download";
                 a.download = text.name;
                 p.appendChild(a);
-                logElement(p);
+                message.appendChild(p);
              filechunks = [];
              file='';
          }
@@ -232,9 +250,11 @@ function addPeer(){
           if (text.type == "first data") {
               p.textContent = text.s;
               message.appendChild(p);
+              messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
            }else if(text.type =="chat") {
                p.textContent = text.name + ' : ' + text.msg;
                message.appendChild(p);
+               messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
            }else if(text.type == "finish"){
               var file = new Blob(filechunks);
               console.log('blob',file);
@@ -247,7 +267,7 @@ function addPeer(){
                   a.textContent = "download";
                   a.download = text.name;
                   p.appendChild(a);
-                  logElement(p);
+                  message.appendChild(p);
                filechunks = [];
                file='';
           }
@@ -312,6 +332,7 @@ upload.addEventListener("change",(event)=>{
              const p = document.createElement('p');
              p.textContent = "me : " + name + "  uploaded";
              message.appendChild(p);
+             messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
              peer.send(JSON.stringify(finish));
          }
         // end of convert size to human readable code 

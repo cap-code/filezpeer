@@ -78,6 +78,10 @@ html body{
     color:black;
 }
 
+#messageContainerOuter{
+    overflow-y:scroll;
+}
+
 #message{
   border-radius: .5rem;
   margin-right: 5px;
