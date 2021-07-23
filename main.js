@@ -1,9 +1,13 @@
 var room = Math.floor(Math.random() * 100) + 1;
-var name = navigator.platform + room;
+var defaultName = navigator.platform + room;
+var userName;
+const hostButton = document.querySelector('#hostButton');
+const joinButton = document.querySelector('#joinButton');
+const helloUser = document.querySelector('#helloUser');
+helloUser.style.display="none";
+const inputNameSuperForm = document.querySelector('#inputNameSuperForm');
 var message = document.querySelector('.message');
-var hostForm = document.querySelector('.host');
 var chatboxForm = document.querySelector('.chatbox');
-var joinForm = document.getElementById("join");
 var upload = document.getElementById("upload");
 const fileSelect = document.getElementById("fileSelect");
 //do not use this API_URL ,its only for demo , if u want one go to https://www.piesocket.in/ 
@@ -11,6 +15,17 @@ var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
 var start;
 var peer;
+
+
+//getting user name
+document.querySelector('#inputName').addEventListener('click',(evt)=>{
+      userName = document.querySelector('#inputNameForm').value;
+      console.log(userName);
+      helloUser.textContent = `Hola ${userName}, welcome !!`;
+      helloUser.style.display="";
+      inputNameSuperForm.style.display= "none";
+ });
+
 
 function log(message) {
     const log = document.querySelector('#log');
@@ -32,29 +47,30 @@ function logElement(elm) {
     log.appendChild(elm);
 }
 
- hostForm.addEventListener('submit', event => {
-     start="host";
-    event.preventDefault();
-    const formdata = new FormData (hostForm);
-    if (formdata.get('name') != "") {
-        name = formdata.get('name');
-    }
-    document.getElementById("roomid").innerHTML = room;
-    init();
-    joinForm.style.display = "none";
-});
-joinForm.addEventListener('submit', event => {
-    start ="join";
-    event.preventDefault();
-    const formdata = new FormData(joinForm);
-    if (formdata.get('join') == "" || formdata.get('join') == " ") {
-        window.alert("enter room id");
-    } else {
-       room = formdata.get('join');
-        init();
-        joinForm.reset();
-    }
-});
+
+  hostButton.addEventListener('click',(evt)=>{
+      start = 'host';
+      if(!userName){
+         userName = defaultName;
+      }
+      document.querySelector('#hostButtonSpan').textContent = room;
+      init();
+      })
+
+joinButton.addEventListener('click',evt=>{
+    start='join';
+    document.querySelector('#inputCodeButton').addEventListener('click',evt=>{
+        const inputCode = document.querySelector('#inputCode').value;
+        if(inputCode == "" || inputCode == " " || !inputCode){
+            window.alert("please enter room id to proceeed");
+        }else{
+            room = inputCode;
+            document.querySelector('#hostButtonSpan').textContent = room;
+            init();
+        }
+    })
+})
+
 chatboxForm.addEventListener('submit', event => {
     event.preventDefault();
     const formdata = new FormData(chatboxForm);

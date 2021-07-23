@@ -1,35 +1,67 @@
 <html>
     <head>
      <title>fileZpeer</title>
-     <!-- <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script> -->
-     <!-- <script src='https://bundle.run/prettier-bytes'></script> -->
-     <!-- <script src='https://bundle.run/upload-element'></script>  -->
-     <!-- <script src='https://bundle.run/drag-drop'></script> -->
-     <!-- <script src="https://bundle.run/simple-peer"></script>  -->
-     <!-- <script src="https://bundle.run/simple-websocket"></script>  -->
-     <!-- <script src='https://bundle.run/create-torrent'></script> -->
      <script src="simplePeer.js"></script>
      <script src="simplewebsocket.js"></script>
-
-
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <!-- CSS only -->
+     <link href="style.css" rel="stylesheet" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+     <!-- JavaScript Bundle with Popper -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </head>
     <body>
-     <h1>FILES Z Z PEER</h1>
-     <form class="host">
-         <label for="name">name</label>
-         <input type="text" name="name" id="name" >
-         <label for="roomid">roomid:</label>
-         <span id="roomid" name ="roomid"></span>
-         <button type="submit">host</button>
-     </form>
-    
-     <form id="join">
-        or
-        <p></p>
-         <label for="join">roomid</label>
-         <input type="number" name="join" id="join">
-         <button type ="submit">join</button>
-     </form>
+        <!-- navigation dont no what for (might delete later) -->
+        <nav class="navbar navbar-dark navbar-expand container">
+            <div class="navbar-brand" >
+                <h1 class="display-6" id="head">FILEZPEER</h1>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>  
+              </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto ">
+                      <li class="nav-item">
+                          <div class="nav-link">
+                            <button id="hostButton" class="btn btn-outline-success"><span id="hostButtonSpan">Host</span></button>
+                          </div>
+                      </li>
+                      <li class="nav-item">
+                          <div class="nav-link">
+                            <button id="joinButton" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#joinModal"><span id="joinButtonSpan">Join</span></button>
+                          </div>
+                      </li>  
+                    </ul>
+                </div>
+        </nav>
+       <div class="container ">
+           <div class="row">
+               <div class="col-md-6">
+                <h6 id="helloUser">hi</h6>
+                    <div id="inputNameSuperForm">
+                        <form class="d-flex" >
+                            <input id="inputNameForm"class="form-control" type="text" placeholder="your beautiful name" aria-label="type your name" value>
+                            <button class="btn btn-outline-success" id="inputName" type="submit">Save</button>
+                        </form>
+                    </div>
+               </div>
+           </div>       
+       </div>
+       
+       <div class="modal fade" id="joinModal" tabindex="-1" aria-labelledby="joinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-body">
+                <form class="d-flex">
+                    <input id="inputCode" class="form-control" type="number" placeholder="type your room code" aria-label="type your room code" value>
+                    <button id="inputCodeButton"type="button" class="btn btn-primary" data-bs-dismiss="modal">Join</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
      <section>
         <h2>info</h2>
         <div id='speed'></div>
@@ -39,16 +71,29 @@
      <ul class="message">
          
      </ul>
-     <div>
-        <form class="chatbox" style="bottom:0px;position: relative;">
-            <label for="message">type message</label>
-            <input name="message" id="message">
-            <button type="submit">send</button>
-         </form>
-         <input type="file" name="upload" id="upload" multiple style="display:none;">
-            <button id="fileSelect">Select some files</button>
+     <div class="container">
          <button id="download">Download</button>
      </div>
+     <!-- sending message and attaching files -->
+     <footer class="fixed-bottom" id="footer">
+         <div class="container">
+            <form class="chatbox">
+                <div class="input-group mb-3">
+                    <input type="text" name="message" class="form-control" id="message" placeholder="your awesome message"/>
+                    <input type="file" name="upload" id="upload" multiple style="display:none;">
+                    <button id="fileSelect" class="btn btn-outline-secondary">
+                        <i class="bi bi-folder2-open"></i>
+                    </button>
+                    <button type="submit" class="btn btn-outline-secondary" id="sendButton">
+                        <span id="sendIcon">
+                            <i class="bi bi-cursor-fill"></i>
+                        </span>
+                    </button>
+                </div>
+             </form>
+
+         </div>
+     </footer>
      <script src="main.js"></script>
     </body>
 </html>

@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');
+html body{
+    background-color: #202124;
+    font-family: 'Poppins', sans-serif;
+    color:white;
+}
+
+#icon{
+    display: inline-block;
+    padding:1rem;
+    background-color: #34d399;
+    border-radius: 16px;
+    color:black;
+}
+#head{
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 0px;
+    padding-left:5px;
+}
+.navbar-dark .navbar-toggler-icon{
+    background-image: url('./chat.svg')!important;
+}
+.navbar-dark .navbar-toggler{
+    border-style: none;
+    border-width: 0px;
+    height: 48px;
+    color:black;
+    background-color: #34d399;
+    border-radius: 16px;
+}
+.navbar-toggler:focus{
+    outline-style: none;
+    outline-width: 0px;
+    box-shadow: none!important;
+}
+#hostButton{
+  border-style: none;
+  border-color: #34d399 ;
+  background-color: #34d399;
+  border-radius: 8px;
+  color:black;
+}
+#joinButton{
+    border-style: none;
+    border-color: #151517 ;
+    background-color: #151517;
+    border-radius: 8px;
+    color:#8a8a8b;
+}
+.modal-content{
+    background-color:#202124!important;
+}
+#inputCode{
+    border-color: #151517;
+    border-radius: 0px;
+    background-color: #151517;
+    color:white  
+}
+#inputCodeButton{
+    border-style: none;
+    border-width: 0px;
+    border-radius: 0px;
+    background-color: #34d399 ;
+    color:black;
+}
+#inputNameForm{
+    border-color: #151517;
+    border-radius: 0px;
+    background-color: #151517;
+    color:white
+}
+#inputName{
+    border-style: none;
+    border-width: 0px;
+    border-radius: 0px;
+    background-color: #34d399 ;
+    color:black;
+}
+
+#message{
+  border-radius: .5rem;
+  margin-right: 5px;
+}
+#fileSelect i{
+    font-size: 1.25rem;
+    color:#8a8a8b;
+}
+#fileSelect{
+    border-style: none!important;
+    border-color: none!important;
+    background-color:#232426;
+    border-radius: .5rem;
+    margin-left:3px;
+    margin-right:8px;
+}
+#sendIcon i{
+    font-size: 1.25rem;
+    color:#202124;
+}
+#sendButton{
+    border-style: none;
+    border-color: none;
+    background-color:#34d399;
+    border-radius: .5rem;
+}
+#formDiv1{
+    display: inline-block;
+}
+#formDiv2{
+    display: inline-block;
+}
+#footer{
+    padding-top: 10px;
+    background-color:#151517 ;
+}
