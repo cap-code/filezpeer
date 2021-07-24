@@ -1,18 +1,26 @@
 var room = Math.floor(Math.random() * 100) + 1;
 var defaultName = navigator.platform + room;
 var userName;
+var currentUploadPercentage;
+var currentUploadProgressbar;
+var currentDownloadName;
+var currentDownloadPercentage;
+var currentDownloadProgressbar;
+var currentNoNameDiv;
+var downloadTotalSize;
 const hostButton = document.querySelector('#hostButton');
 const joinButton = document.querySelector('#joinButton');
+const connectionStatus = document.querySelector('#connectionStatus');
 const helloUser = document.querySelector('#helloUser');
+helloUser.style.display="none";
 const nav = document.querySelector('#navigationBar');
 const inputNameDiv = document.querySelector('#inputNameDiv');
 const messageContainerOuter = document.querySelector('#messageContainerOuter');
 const chatboxContainer = document.querySelector('#chatboxContainer');
-helloUser.style.display="none";
 const inputNameSuperForm = document.querySelector('#inputNameSuperForm');
-var message = document.querySelector('.message');
-var chatboxForm = document.querySelector('.chatbox');
-var upload = document.getElementById("upload");
+const message = document.querySelector('.message');
+const sendButton = document.querySelector('#sendButton');
+const upload = document.getElementById("upload");
 const fileSelect = document.getElementById("fileSelect");
 //do not use this API_URL ,its only for demo , if u want one go to https://www.piesocket.in/ 
 var API_URL = "fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
@@ -33,7 +41,7 @@ document.querySelector('#inputName').addEventListener('click',(evt)=>{
       evt.preventDefault();
       userName = document.querySelector('#inputNameForm').value;
       console.log(userName);
-      helloUser.textContent = `Hola ${userName}, welcome !!`;
+      helloUser.textContent = `Hola ${userName} !!`;
       helloUser.style.display="";
       inputNameSuperForm.style.display= "none";
  });
@@ -59,13 +67,119 @@ function logElement(elm) {
     log.appendChild(elm);
 }
 
-
+function createMeChat(msg){
+    const me = document.createElement('div')
+    me.classList.add('me');
+    const textMessageMe = document.createElement('div');
+    textMessageMe.classList.add('textMessageMe');
+    const userNameMsg = document.createElement('div');
+    userNameMsg.classList.add('userName');
+    userNameMsg.textContent = userName;
+    const actualMessage = document.createElement('div');
+    actualMessage.classList.add('actualMessage');
+    actualMessage.textContent  = msg;
+    const time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent = new Date().toLocaleTimeString('en-us',{hour:'2-digit',minute:'2-digit'});
+    textMessageMe.append(userNameMsg,actualMessage,time);
+    me.append(textMessageMe);
+    message.append(me);
+}
+function createOtherChat(text){
+    const other = document.createElement('div')
+    other.classList.add('other');
+    const textMessageOther = document.createElement('div');
+    textMessageOther.classList.add('textMessageOther');
+    const userNameMsg = document.createElement('div');
+    userNameMsg.classList.add('userName');
+    userNameMsg.textContent = text.userName;
+    const actualMessage = document.createElement('div');
+    actualMessage.classList.add('actualMessage');
+    actualMessage.textContent  = text.msg;
+    const time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent = new Date().toLocaleTimeString('en-us',{hour:'2-digit',minute:'2-digit'});
+    textMessageOther.append(userNameMsg,actualMessage,time);
+    other.append(textMessageOther);
+    message.append(other);
+}
+function downloadProgressBar(s){
+    const download = document.createElement('div')
+    download.classList.add('download');
+    download.setAttribute('id',s);
+    const downloadProgressBar = document.createElement('div');
+    downloadProgressBar.classList.add('downloadProgressBar');
+    currentDownloadProgressbar = downloadProgressBar;
+    const downloadContainer = document.createElement('div');
+    downloadContainer.classList.add('downloadContainer');
+    const userNameMsg = document.createElement('div');
+    userNameMsg.classList.add('userName');
+    userNameMsg.textContent = userName;
+    const noNameDiv = document.createElement('div');
+    currentNoNameDiv = noNameDiv;
+    const downloadName = document.createElement('span');
+    downloadName.classList.add('downloadName');
+    downloadName.textContent= s;
+    currentDownloadName = downloadName;
+    const downloadPercentage = document.createElement('span');
+    downloadPercentage.classList.add('downloadPercentage');
+    downloadPercentage.textContent=`(0%)`;
+    currentDownloadPercentage = downloadPercentage;
+    noNameDiv.append(downloadName,downloadPercentage);
+    const time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent = new Date().toLocaleTimeString('en-us',{hour:'2-digit',minute:'2-digit'});
+    downloadContainer.append(userNameMsg,noNameDiv,time);
+     downloadProgressBar.appendChild(downloadContainer);
+     download.appendChild(downloadProgressBar);
+     message.appendChild(download); 
+}
+function updateDownloadProgressBar(value){
+    currentDownloadPercentage.textContent = `${value}%`;
+    currentDownloadProgressbar.style.background = `linear-gradient(90deg, #34d39986 ${value}%, #202124 0%)`;
+}
+function uploadProgressBar(s){
+    const upload = document.createElement('div')
+    upload.classList.add('upload');
+    upload.setAttribute('id',s);
+    const uploadProgressBar = document.createElement('div');
+    uploadProgressBar.classList.add('uploadProgressBar');
+    currentUploadProgressbar = uploadProgressBar;
+    const uploadContainer = document.createElement('div');
+    uploadContainer.classList.add('uploadContainer');
+    const userNameMsg = document.createElement('div');
+    userNameMsg.classList.add('userName');
+    userNameMsg.textContent = userName;
+    const noNameDiv = document.createElement('div');
+    const uploadName = document.createElement('span');
+    uploadName.classList.add('uploadName');
+    uploadName.textContent= s;
+    const uploadPercentage = document.createElement('span');
+    uploadPercentage.classList.add('uploadPercentage');
+    uploadPercentage.textContent=`(0%)`;
+    currentUploadPercentage = uploadPercentage;
+    noNameDiv.append(uploadName,uploadPercentage);
+    const time = document.createElement('div');
+    time.classList.add('time');
+    time.textContent = new Date().toLocaleTimeString('en-us',{hour:'2-digit',minute:'2-digit'});
+    uploadContainer.append(userNameMsg,noNameDiv,time);
+     uploadProgressBar.appendChild(uploadContainer);
+     upload.appendChild(uploadProgressBar);
+     message.appendChild(upload);
+}
+function updateUploadProgress(value){
+    currentUploadPercentage.textContent = `(${value}%)`;
+    currentUploadProgressbar.style.background = `linear-gradient(90deg, #34d39986 ${value}%, #202124 0%)`;
+}
   hostButton.addEventListener('click',(evt)=>{
       start = 'host';
       if(!userName){
          userName = defaultName;
       }
       document.querySelector('#hostButtonSpan').textContent = room;
+      helloUser.textContent = `Hola ${userName} !!`;
+      helloUser.style.display="";
+      inputNameSuperForm.style.display= "none";
       init();
       })
 
@@ -81,15 +195,17 @@ joinButton.addEventListener('click',evt=>{
         }else{
             room = inputCode;
             document.querySelector('#hostButtonSpan').textContent = room;
+            helloUser.textContent = `Hola ${userName} !!`;
+            helloUser.style.display="";
+            inputNameSuperForm.style.display= "none";
             init();
         }
     })
 })
 
-chatboxForm.addEventListener('submit', event => {
+sendButton.addEventListener('click', event => {
     event.preventDefault();
-    const formdata = new FormData(chatboxForm);
-    const msg = formdata.get('message');
+    const msg = document.querySelector('#messageInput').value;
     let type = "chat";
     const data = {
         userName,
@@ -97,20 +213,26 @@ chatboxForm.addEventListener('submit', event => {
         type
     };
     peer.send(JSON.stringify(data));
-    const p = document.createElement('p');
-    p.textContent = "me : " + msg;
-    message.appendChild(p);
+    createMeChat(msg);
     messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
-    chatboxForm.reset();
+    document.querySelector('#messageInput').value="";
+    document.querySelector('#messageInput').focus();
 });
 //websocket is set
 function init() {
-    socket = new simpleWebsocket("wss://us-nyc-1.websocket.me/v3/" + room + "?apiKey=" + API_URL);
+    socket = new simpleWebsocket("wss://us-nyc-1.piesocket.com/v3/" + room + "?apiKey=" + API_URL);
     socket.on("connect", () => {
-        log(`connection established`);
         if(start=="join"){
+         connectionStatus.textContent='connection ready';
+         connectionStatus.style.backgroundColor = '#f5b74c';
+         connectionStatus.style.marginLeft="5px";
+         connectionStatus.style.color="black";
          createPeer();
         }else{
+         connectionStatus.textContent='connecting';
+         connectionStatus.style.backgroundColor = '#f5b74c';
+         connectionStatus.style.marginLeft="5px";
+         connectionStatus.style.color="black";
          addPeer();
         }
     });
@@ -156,7 +278,10 @@ function createPeer(){
     });
 
     peer.on('connect', () => {
-        log(`peer connection established`);
+         connectionStatus.textContent='connected';
+         connectionStatus.style.backgroundColor = '#34d399';
+         connectionStatus.style.marginLeft="5px";
+         connectionStatus.style.color="black";
     });
     var filechunks = [];
     peer.on('data', data => {
@@ -171,14 +296,12 @@ function createPeer(){
         console.log(text);
         if(flag){
             var text = JSON.parse(data);
-          const p = document.createElement('li');
         if (text.type == "first data") {
-            p.textContent = text.s;
-            message.appendChild(p);
+            downloadProgressBar(text.s);
+            downloadTotalSize = text.size;
             messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
          }else if(text.type =="chat") {
-             p.textContent = text.name + ' : ' + text.msg;
-             message.appendChild(p);
+             createOtherChat(text);
              messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
          }else if(text.type == "finish"){
             var file = new Blob(filechunks);
@@ -186,18 +309,24 @@ function createPeer(){
             file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
             console.log(text.ext);
             console.log('received',file);
-                const p =document.createElement('p');
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(file);
-                a.textContent = "download";
+                a.textContent = text.name;
                 a.download = text.name;
-                p.appendChild(a);
-                message.appendChild(p);
+                currentDownloadName.textContent="";
+                currentNoNameDiv.append(a);
              filechunks = [];
              file='';
+             currentDownloadName = null;
+             currentDownloadPercentage = null;
+             currentDownloadProgressbar = null;
+             currentNoNameDiv=null;
          }
         }else {
             filechunks.push(data);
+            let percentage = Math.floor(((filechunks.length*1024*16)/downloadTotalSize)*100);
+            updateDownloadProgressBar(percentage);
+
         }
         //console.log(text);
         
@@ -232,7 +361,10 @@ function addPeer(){
         socket.send(JSON.stringify(data));
     });
     peer.on('connect', () => {
-        log(`peer connection established`);
+        connectionStatus.textContent='connected';
+         connectionStatus.style.backgroundColor = '#34d399';
+         connectionStatus.style.marginLeft="5px";
+         connectionStatus.style.color="black";
     });
     var filechunks = [];
     peer.on('data', data => {
@@ -246,14 +378,12 @@ function addPeer(){
       }
         if(flag){
             var text = JSON.parse(data);
-            const p = document.createElement('li');
           if (text.type == "first data") {
-              p.textContent = text.s;
-              message.appendChild(p);
+              downloadProgressBar(text.s);
+              downloadTotalSize = text.size;
               messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
            }else if(text.type =="chat") {
-               p.textContent = text.name + ' : ' + text.msg;
-               message.appendChild(p);
+               createOtherChat(text);
                messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
            }else if(text.type == "finish"){
               var file = new Blob(filechunks);
@@ -261,20 +391,24 @@ function addPeer(){
               file = new File([file],text.name,{lastModified: new Date().getTime(),type:text.ext});
               console.log(text.ext);
               console.log('received',file);
-                  const p = document.createElement('p');
                   const a = document.createElement('a');
                   a.href = URL.createObjectURL(file);
                   a.textContent = "download";
                   a.download = text.name;
-                  p.appendChild(a);
-                  message.appendChild(p);
+                  currentDownloadName.textContent="";
+                  currentNoNameDiv.append(a);
                filechunks = [];
                file='';
+               currentDownloadName = null;
+                currentDownloadPercentage = null;
+                currentDownloadProgressbar = null;
+                currentNoNameDiv = null;
           }
           }else {
               filechunks.push(data);
+              let percentage = Math.floor(((filechunks.length*1024*16)/downloadTotalSize)*100);
+               updateDownloadProgressBar(percentage);
           }
-            //div.appendChild(p);
     });
 }
 fileSelect.addEventListener("click", function (e) {
@@ -294,12 +428,8 @@ upload.addEventListener("change",(event)=>{
         for(let i=0;size/1024>1&&i<3;i++,size/=1024){
             count =i;   
         }
-        s= FilesList[i].name + " " +size.toFixed(2)+ " " +prettySize[count];
+        s= FilesList[i].name + "_" +size.toFixed(2)+ "_" +prettySize[count];
     }
-        // let file = [];
-        //  for(var i=0 ;i<FilesList.length;i++){
-        //      file[i] =FilesList[i];
-        //  }
         console.log(FilesList[0]);
         let name = FilesList[0].name;
         const lastDote = name.lastIndexOf('.');
@@ -308,19 +438,24 @@ upload.addEventListener("change",(event)=>{
          let first ={
              type,
              s,
+             size:FilesList[0].size
          };
          peer.send(JSON.stringify(first));
+         uploadProgressBar(s);
          const reader = new FileReader();
          reader.readAsArrayBuffer(FilesList[0]);
          reader.onload = function(){
              let buffer = reader.result;
              const chunksize = 16*1024;
+             var totalnumber = buffer.byteLength/chunksize;
              var number = 1;
              while(buffer.byteLength){
                  const chunk = buffer.slice(0,chunksize);
                  buffer = buffer.slice(chunksize,buffer.byteLength);
                  console.log(`chunks ${number}:`,chunk);
+                 let percentage = Math.floor((number/totalnumber) * 100);
                  peer.send(chunk);
+                 updateUploadProgress(percentage);
                  number++;
              }
              type ="finish";
@@ -329,11 +464,9 @@ upload.addEventListener("change",(event)=>{
                 name,
                 ext
              }
-             const p = document.createElement('p');
-             p.textContent = "me : " + name + "  uploaded";
-             message.appendChild(p);
-             messageContainerOuter.scrollTop = messageContainerOuter.scrollHeight;
              peer.send(JSON.stringify(finish));
+             currentUploadPercentage = null;
+             currentUploadProgressbar = null;
          }
         // end of convert size to human readable code 
 },false);

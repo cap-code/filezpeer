@@ -18,9 +18,6 @@ html body{
     margin-bottom: 0px;
     padding-left:5px;
 }
-.navbar-dark .navbar-toggler-icon{
-    background-image: url('./chat.svg')!important;
-}
 .navbar-dark .navbar-toggler{
     border-style: none;
     border-width: 0px;
@@ -47,6 +44,9 @@ html body{
     background-color: #151517;
     border-radius: 8px;
     color:#8a8a8b;
+}
+#helloUser{
+    display: inline-block;
 }
 .modal-content{
     background-color:#202124!important;
@@ -80,11 +80,120 @@ html body{
 
 #messageContainerOuter{
     overflow-y:scroll;
+    background-color: #202124;
 }
 
-#message{
+#messageInput{
   border-radius: .5rem;
   margin-right: 5px;
+}
+
+.other{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+.me{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+.download{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+.upload{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+.textMessageOther{
+    max-width:200px;
+    border-style: solid;
+    border-color:#8a8a8b;
+    border-width: 1px;
+    border-radius: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 2px;
+    padding-top: 3px;
+    background-color:#8a8a8b ;
+    color:black;
+}
+.textMessageMe{
+    max-width:200px;
+    border-style: solid;
+    border-color:#34d399;
+    border-width: 1px;
+    border-radius: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 2px;
+    padding-top: 3px;
+    background-color: #34d399;
+    color:black;
+}
+.downloadContainer{
+    max-width:200px;
+    border-radius: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 2px;
+    padding-top: 3px;
+}
+.uploadContainer{
+    max-width:200px;
+    border-radius: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 2px;
+    padding-top: 3px; 
+}
+.downloadName{
+    font-size: 14.5px;
+    overflow-wrap: break-word;
+}
+.uploadName{
+    font-size: 14.5px;
+    overflow-wrap: break-word;
+}
+.downloadPercentage{
+    display: inline;
+}
+.uploadPercentage{
+    display: inline;
+}
+.downloadProgressBar{
+    border-style:solid;
+    border-color: #34d399;
+    border-width: 1px;
+    background:linear-gradient(90deg, #34d39986 0%, #202124 0%);
+    border-radius: 12px;
+}
+.uploadProgressBar{
+    border-style:solid;
+    border-color: #34d399;
+    border-width: 1px;
+    background:linear-gradient(90deg, #34d39986 0%, #202124 0%);
+    border-radius: 12px;
+}
+.username{
+    font-size: 12px;
+}
+.actualMessage{
+    font-size: 14.5px;
+    overflow-wrap: break-word;
+}
+.time{
+    display:block;
+    float:right;
+    margin-left: auto;
+    font-size: 10px;
 }
 #fileSelect i{
     font-size: 1.25rem;
@@ -115,6 +224,5 @@ html body{
     display: inline-block;
 }
 #footer{
-    padding-top: 10px;
     background-color:#151517 ;
 }

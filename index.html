@@ -38,7 +38,9 @@
        <div class="container " id="inputNameDiv">
            <div class="row">
                <div class="col-md-6">
-                <h6 id="helloUser">hi</h6>
+                   <div>
+                    <h6 id="helloUser"></h6><span id="connectionStatus"></span>
+                   </div>
                     <div id="inputNameSuperForm">
                         <form class="d-flex" >
                             <input id="inputNameForm"class="form-control" type="text" placeholder="your beautiful name" aria-label="type your name" value>
@@ -69,25 +71,27 @@
      
      <!-- sending message and attaching files -->
      <footer class="fixed-bottom" id="footer">
-        <div class="container" id="messageContainerOuter">
-            <ul class="message">
-            </ul>
+        <div class="container-fluid" id="messageContainerOuter">
+            <div class="container">
+                <div class="message">
+                </div>
+            </div> 
          </div>
-         <div class="container" id="chatboxContainer">
-            <form class="chatbox">
+         <div class="container mt-3" id="chatboxContainer">
+            <div>
                 <div class="input-group mb-3">
-                    <input type="text" name="message" class="form-control" id="message" placeholder="your awesome message"/>
+                    <input type="file" name="upload" id="upload" multiple style="display:none;">
+                    <button id="fileSelect" class="btn btn-outline-secondary">
+                        <i class="bi bi-folder2-open"></i>
+                    </button>
+                    <input type="text" name="messageInput" class="form-control" id="messageInput" placeholder="your awesome message" autocomplete="off" value/>
                     <button type="submit" class="btn btn-outline-secondary" id="sendButton">
                         <span id="sendIcon">
                             <i class="bi bi-cursor-fill"></i>
                         </span>
                     </button>
-                    <input type="file" name="upload" id="upload" multiple style="display:none;">
-                    <button id="fileSelect" class="btn btn-outline-secondary">
-                        <i class="bi bi-folder2-open"></i>
-                    </button>
                 </div>
-             </form>
+            </div>
          </div>
      </footer>
      <script src="main.js"></script>
