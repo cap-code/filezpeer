@@ -313,6 +313,7 @@ function createPeer(){
                 a.href = URL.createObjectURL(file);
                 a.textContent = text.name;
                 a.download = text.name;
+                a.style.overflowWrap="break-word";
                 currentDownloadName.textContent="";
                 currentNoNameDiv.append(a);
              filechunks = [];
