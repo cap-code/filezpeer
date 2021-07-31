@@ -394,8 +394,9 @@ function addPeer(){
               console.log('received',file);
                   const a = document.createElement('a');
                   a.href = URL.createObjectURL(file);
-                  a.textContent = "download";
+                  a.textContent = text.name;
                   a.download = text.name;
+                  a.style.overflowWrap='break-word';
                   currentDownloadName.textContent="";
                   currentNoNameDiv.append(a);
                filechunks = [];
@@ -433,7 +434,6 @@ upload.addEventListener("change",(event)=>{
     }
         console.log(FilesList[0]);
         let name = FilesList[0].name;
-        const lastDote = name.lastIndexOf('.');
         const ext = FilesList[0].type;
          let type = "first data";
          let first ={
@@ -443,35 +443,33 @@ upload.addEventListener("change",(event)=>{
          };
          peer.send(JSON.stringify(first));
          uploadProgressBar(s);
-         const reader = new FileReader();
-         reader.readAsArrayBuffer(FilesList[0]);
-         reader.onload = function(){
-             let buffer = reader.result;
-             const chunksize = 16*1024;
-             var totalnumber = buffer.byteLength/chunksize;
-             var number = 1;
-             while(buffer.byteLength){
-                 const chunk = buffer.slice(0,chunksize);
-                 buffer = buffer.slice(chunksize,buffer.byteLength);
-                 console.log(`chunks ${number}:`,chunk);
-                 let percentage = Math.floor((number/totalnumber) * 100);
-                 peer.send(chunk);
-                 updateUploadProgress(percentage);
-                 number++;
-             }
-             type ="finish";
-             let finish={
-                type,
-                name,
-                ext
-             }
-             peer.send(JSON.stringify(finish));
-             currentUploadPercentage = null;
-             currentUploadProgressbar = null;
-         }
-        // end of convert size to human readable code 
+         chopAndSend(FilesList[0])
+         .then(data =>{
+             console.log(data);
+                type ="finish";
+                let finish={
+                    type,
+                    name,
+                    ext
+                }
+            peer.send(JSON.stringify(finish));
+            currentUploadPercentage = null;
+            currentUploadProgressbar = null; 
+         })
+            
 },false);
 
-
-
-
+async function chopAndSend(data){
+    var val = 0;
+    var number = Math.floor(data.size/(16*1024));
+    for(let i = 0; i<=number;i++){
+       const chunk = data.slice(val,val+16*1024);
+       const buffer = await chunk.arrayBuffer();
+       console.log(`${i}`,buffer);
+       peer.send(buffer);
+       var percentage = Math.floor((i/number)*100);
+       updateUploadProgress(percentage);
+       val += 16*1024;
+    }
+    return 'done';
+ }

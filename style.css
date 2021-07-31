@@ -84,6 +84,7 @@ html body{
 }
 
 #messageInput{
+  display: inline-block;
   border-radius: .5rem;
   margin-right: 5px;
 }
@@ -212,6 +213,7 @@ html body{
     color:#202124;
 }
 #sendButton{
+    display: inline-block;
     border-style: none;
     border-color: none;
     background-color:#34d399;
