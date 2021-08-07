@@ -1,6 +1,6 @@
 # filezpeer
 lets you instant transfer any files over internet . under the hood it uses webrtc transfer the files.its super reliable and super easy.
-https://www.filezpeer.ga/
+https://filezpeer.in/
 ![Screenshot from 2021-08-06 22-53-15](https://user-images.githubusercontent.com/33504045/128549737-984b5a66-937f-494b-ada8-ed1a45d51ca4.png)
 ## How to use?
 you can either click on host or join button provided on the site.
@@ -15,5 +15,5 @@ you can either click on host or join button provided on the site.
 - [X] created progress bar 
 - [X] added messaging support   
 - [ ] connecting more than 2 users
-- [ ] creating a distributed system to transfer between more than 2 users
+- [ ] creating a distributed system to transfer files between more than 2 users
 - [ ] create a sign-in / sign-up process so you dont have to create a room id everytime when you want to tranfer files
