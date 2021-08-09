@@ -461,15 +461,15 @@ upload.addEventListener("change",(event)=>{
 
 async function chopAndSend(data){
     var val = 0;
-    var number = Math.floor(data.size/(16*1024));
+    var number = Math.floor(data.size/(64*1024));
     for(let i = 0; i<=number;i++){
-       const chunk = data.slice(val,val+16*1024);
+       const chunk = data.slice(val,val+64*1024);
        const buffer = await chunk.arrayBuffer();
        console.log(`${i}`,buffer);
        peer.send(buffer);
        var percentage = Math.floor((i/number)*100);
        updateUploadProgress(percentage);
-       val += 16*1024;
+       val += 64*1024;
     }
     return 'done';
  }
