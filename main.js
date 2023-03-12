@@ -254,7 +254,7 @@ function createPeer(){
     //u can get turn server from https://xirsys.com/
     peer = new simplePeer({
         initiator: true,
-        config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
+        config:{ iceServers: [{ urls: 'stun:stun1.l.google.com:19302' }, { urls: 'stun:stun.justvoip.com:3478' },{ urls: 'stun:stun2.l.google.com:19302' },{
    urls: [ "stun:bn-turn1.xirsys.com" ]
 },{
    username: "DizWDRVNR_YztfyU5maWHrBL0oBh4Tf85x13P3wXo9MfA6n6mkCOSUcn2i2NgSlvAAAAAF9JMNljYXBjb2Rl",
@@ -338,7 +338,7 @@ function addPeer(){
      //u can use google stun , but cant use the turn its only for demo and don't work for you 
     //u can get turn server from https://xirsys.com/
     peer= new simplePeer({
-    config:{ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },{
+    config:{ iceServers: [{ urls: 'stun:stun1.l.google.com:19302' }, { urls: 'stun:stun2.l.google.com:19302' },{ urls: 'stun:stun.justvoip.com:3478' },{
    urls: [ "stun:bn-turn1.xirsys.com" ]
 },{
    username: "DizWDRVNR_YztfyU5maWHrBL0oBh4Tf85x13P3wXo9MfA6n6mkCOSUcn2i2NgSlvAAAAAF9JMNljYXBjb2Rl",
