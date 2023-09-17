@@ -23,7 +23,7 @@ const sendButton = document.querySelector('#sendButton');
 const upload = document.getElementById("upload");
 const fileSelect = document.getElementById("fileSelect");
 //do not use this API_URL ,its only for demo , if u want one go to https://www.piesocket.in/ 
-var API_URL = "VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV"//"oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm"//"fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
+var API_URL = "ef186969da0a887786978e88f30fa841"//"oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm"//"fHCjeFDqqxXH2ztpCiiNBVI9ECYq6BFcATyhGy9keLThkwMNdf0pABdIzWhJ";
 var socket;
 var start;
 var peer;
@@ -220,7 +220,7 @@ sendButton.addEventListener('click', event => {
 });
 //websocket is set
 function init() {
-    socket = new simpleWebsocket("wss://demo.piesocket.com/v3/" + room + "?api_key=" + API_URL);
+    socket = new simpleWebsocket("wss://socketsbay.com/wss/v2/" + room + "/" + API_URL+"/");
     socket.on("connect", () => {
         if(start=="join"){
          connectionStatus.textContent='connection ready';
